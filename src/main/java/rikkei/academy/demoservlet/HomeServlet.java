@@ -35,6 +35,27 @@ public class HomeServlet extends HttpServlet {
                     // xóa theo id
                     list.remove(findById(Integer.parseInt(req.getParameter("id"))));
                     break;
+                case "EDIT":
+                    Student studentEdit =findById(Integer.parseInt(req.getParameter("id")));
+                    if(studentEdit!=null){
+                        req.setAttribute("studentedit",studentEdit);
+                        req.getRequestDispatcher("/view/editStudent.jsp").forward(req,resp);
+                    }
+                    break;
+                case "SEARCH":
+                    String searchName = req.getParameter("search");
+                    List<Student> listSearch = new ArrayList<>();
+                    for (Student s:list
+                         ) {
+                        if(s.getName().toLowerCase().contains(searchName.toLowerCase())){
+                            listSearch.add(s);
+                        }
+                    }
+                    req.setCharacterEncoding("UTF-8");
+                    req.setAttribute("students",listSearch);
+                    req.getRequestDispatcher("/view/listStudent.jsp").forward(req,resp);
+
+                    break;
                 default:
                     break;
             }
@@ -64,6 +85,13 @@ public class HomeServlet extends HttpServlet {
                 list.add(new Student(id,name,Integer.parseInt(age)));
                 showListStudent(req,resp);
                 break;
+            case "UPDATE":
+                int idEdit =Integer.parseInt(req.getParameter("id"));
+                String nameEdit =req.getParameter("name");
+                int ageEdit =Integer.parseInt(req.getParameter("age"));
+                list.set(list.indexOf(findById(idEdit)),new Student(idEdit,nameEdit,ageEdit) );
+                showListStudent(req,resp);
+                break;
             default:
                 break;
         }
@@ -86,4 +114,8 @@ public class HomeServlet extends HttpServlet {
         return null;
     }
 
+    @Override
+    public void destroy() {
+        super.destroy();
+    }
 }

@@ -20,23 +20,30 @@
 </head>
 <body>
     <h1>Danh sách sinh viên</h1>
+    <form action="/home-servlet">
+        <input type="text"  name="search">
+        <input type="submit" value="SEARCH" name="action">
+    </form>
     <a href="./view/newStudent.jsp">Add</a>
 <table border="10" cellspacing="10" cellpadding="20" style="text-align: center">
 <thead>
 <tr>
-  <th>ID</th>
+
+  <th>STT</th>
+
   <th>Name</th>
   <th>Age</th>
   <th colspan="2">Action</th>
 </tr>
 </thead>
   <tbody>
-        <c:forEach items="${students}" var="s">
+        <c:forEach items="${students}" var="s" varStatus="iterator">
             <tr>
-                <td>${s.getId()}</td>
+                <td>${iterator.count}</td>
+
                 <td>${s.name}</td>
                 <td>${s.age}</td>
-                <td><a href="">Edit</a></td>
+                <td><a href="/home-servlet?action=EDIT&id=${s.id}">Edit</a></td>
                 <td><a onclick="return confirm('Do you want to delete this student ?')" href="/home-servlet?action=DELETE&id=${s.id}">Delete</a></td>
             </tr>
         </c:forEach>
